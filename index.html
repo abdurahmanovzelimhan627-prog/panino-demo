@@ -37,7 +37,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:1
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 .app{max-width:760px;margin:0 auto}
-button,select{font:inherit;color:inherit}
+button,select,input{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none}
 button:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-offset:2px}
 .num{font-variant-numeric:tabular-nums}
@@ -48,12 +48,12 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var
 .date{font-size:13px;color:var(--muted);text-align:right}
 .date b{display:block;color:var(--ink);font-size:14px}
 .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px;margin-top:12px}
-.roles button{padding:8px 4px;border-radius:10px;font-weight:700;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.15}
+.roles button{padding:8px 4px;border-radius:10px;font-weight:700;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.15;position:relative}
 .roles button svg{width:22px;height:22px}
 .roles button small{font-weight:500;font-size:11px}
 .roles button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.badge{position:absolute;top:4px;right:8px;min-width:18px;height:18px;border-radius:9px;background:var(--red);color:var(--on-accent);font-size:11px;font-weight:700;display:grid;place-items:center;padding:0 5px}
 
-/* Строка «кто это видит» */
 .who-sees{display:flex;gap:10px;align-items:flex-start;background:var(--blue-soft);color:var(--ink);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:4px}
 .who-sees b{color:var(--blue-ink)}
 .who-sees svg{width:20px;height:20px;flex:none;color:var(--blue-ink);margin-top:1px}
@@ -70,11 +70,28 @@ h2{font-size:18px;font-weight:700;margin:22px 0 4px}
 .legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:13px;color:var(--muted);margin-bottom:10px}
 .legend .tag{color:var(--ink)} .legend .th-img{width:24px;height:24px}
 
-/* Итоги дня */
-.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.sum{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
 .sum div{padding:10px 12px}
 .sum span{font-size:12px;color:var(--muted);display:block}
 .sum b{font-size:20px}
+
+/* Поиск, список кафе, фильтры */
+.tools{display:grid;gap:10px;margin-top:16px}
+.search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0 12px}
+.search svg{width:18px;height:18px;color:var(--muted);flex:none}
+.search input{flex:1;min-width:0;border:0;background:none;padding:12px 0;font-size:16px;color:var(--ink);outline:none}
+.search:focus-within{border-color:var(--ink)}
+.lbl{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:13px;font-weight:600}
+.chips button span{color:var(--muted);font-weight:700;margin-left:2px}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chips button[aria-pressed="true"] span{color:inherit;opacity:.75}
+.chips.cafes button{font-weight:500}
+.chips.cafes button i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--line);vertical-align:1px}
+.chips.cafes button i.ordered,.chips.cafes button i.wait{background:var(--amber)}
+.chips.cafes button i.ok{background:var(--green)}
+.empty{padding:18px;text-align:center;color:var(--muted);font-size:14px}
 
 /* Таблица */
 .tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
@@ -92,28 +109,11 @@ tfoot td{background:var(--head);font-weight:700;border-top:1px solid var(--line)
 .st{display:inline-block;font-size:12px;font-weight:600;padding:3px 8px;border-radius:999px;white-space:nowrap;margin-top:4px}
 .st.go{background:var(--amber-soft);color:var(--amber)}
 .st.ok{background:var(--green-soft);color:var(--green-ink)}
-.st.no{background:var(--head);color:var(--muted);border:1px solid var(--line);margin:0}
+.st.no{background:var(--head);color:var(--muted);border:1px solid var(--line)}
 .ret{color:var(--red);font-weight:600}
 .rsub{display:block;font-size:11px;font-weight:700;color:var(--red);line-height:1.1}
-/* Поиск и фильтры владельца */
-.tools{display:grid;gap:10px;margin-top:16px}
-.search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0 12px}
-.search svg{width:18px;height:18px;color:var(--muted);flex:none}
-.search input{flex:1;min-width:0;border:0;background:none;padding:12px 0;font:inherit;font-size:16px;color:var(--ink);outline:none}
-.search:focus-within{border-color:var(--ink)}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips button{padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:13px;font-weight:600}
-.chips button span{color:var(--muted);font-weight:700;margin-left:2px}
-.chips button.warn span{color:var(--red)}
-.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.chips button[aria-pressed="true"] span{color:inherit;opacity:.75}
-.why{display:block;font-size:11px;font-weight:600;color:var(--red);margin-top:2px}
-.empty{padding:18px;text-align:center;margin-top:14px;color:var(--muted)}
-.sell{font-size:12px;font-weight:600;line-height:1.25}
-.sell.hi{color:var(--red)} .sell.lo{color:var(--green-ink)}
 .lnk{color:var(--red);font-weight:600;font-size:13px;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
 
-/* Счётчик */
 .cnt{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;background:var(--card);flex:none}
 .cnt button{width:40px;height:40px;font-size:20px;font-weight:600}
 .cnt output{min-width:30px;text-align:center;font-weight:700;font-size:16px}
@@ -141,7 +141,7 @@ tfoot td{background:var(--head);font-weight:700;border-top:1px solid var(--line)
 
 /* Курьер */
 .next{padding:14px;border:2px solid var(--ink)}
-.next .lbl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.next .k{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .next h3{margin:4px 0 0;font-size:20px}
 .next .a{color:var(--muted);font-size:14px}
 .give{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
@@ -155,7 +155,6 @@ tfoot td{background:var(--head);font-weight:700;border-top:1px solid var(--line)
 .allr .li:last-child{border-bottom:0}
 .allr .li span.a{display:block;font-size:12px;color:var(--muted)}
 .allr .li .st{margin:0}
-.finish{padding:18px;text-align:center}
 
 /* Накладная */
 .sheet{position:fixed;inset:0;z-index:20;background:rgba(15,12,10,.5);display:flex;align-items:flex-end;justify-content:center;
@@ -173,8 +172,9 @@ tfoot td{background:var(--head);font-weight:700;border-top:1px solid var(--line)
 .inv .sg div{border:1px solid var(--line);border-radius:8px;padding:8px}
 .inv .sg b{display:block;color:var(--green-ink);font-size:13px}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;z-index:30;max-width:calc(100% - 32px)}
-.foot{font-size:12px;color:var(--muted);margin-top:18px;text-align:center}
-@media (max-width:520px){.sum b{font-size:17px} th,td{padding:9px 4px} th:first-child,td:first-child{padding-left:10px} th:last-child,td:last-child{padding-right:10px}
+.foot{font-size:12px;color:var(--muted);margin-top:18px;text-align:center;display:grid;gap:8px;justify-items:center}
+.foot button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 14px;font-weight:600;font-size:13px;color:var(--ink)}
+@media (max-width:520px){.sum b{font-size:18px} th,td{padding:9px 4px} th:first-child,td:first-child{padding-left:10px} th:last-child,td:last-child{padding-right:10px}
   td:first-child{width:auto} .th-img{width:26px;height:26px} table{font-size:13px} .lnk{font-size:12px} td .st{font-size:11px;padding:2px 6px}}
 </style>
 
@@ -190,11 +190,11 @@ tfoot td{background:var(--head);font-weight:700;border-top:1px solid var(--line)
       <button role="tab" id="tab-cafe" data-role="cafe" aria-selected="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17M8 3v3M12 3v3"/></svg>Кафе<small>заказать</small></button>
       <button role="tab" id="tab-courier" data-role="courier" aria-selected="false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h11v9H2zM13 10h4l4 3v3h-8"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>Курьер<small>развезти</small></button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h11v9H2zM13 10h4l4 3v3h-8"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>Курьер<small>развезти</small><span id="cour-badge" class="badge" hidden></span></button>
     </div>
   </header>
   <main id="view"></main>
-  <p class="foot">Демо-версия. Кафе и адреса придуманы для примера.</p>
+  <div class="foot"><span>Демо-версия. Кафе и адреса придуманы для примера.</span><button id="restart">Начать демо заново</button></div>
 </div>
 <div id="sheet" class="sheet" hidden></div>
 <div id="toast" class="toast" hidden></div>
@@ -205,28 +205,20 @@ const P=[
   {id:"cl",name:"Классика",comp:"Курица, шампиньоны, моцарелла",img:"img/classic.jpg"},
   {id:"pe",name:"Пепперони",comp:"Колбаса, моцарелла, соус",img:"img/pepperoni.jpg"}
 ];
-// Придуманные кафе Махачкалы. del — что везём сегодня, ret — вернули, next — заказ на завтра, week — % возвратов за неделю
-const C=(id,name,addr,cl,pe,st,time,rcl,rpe,week,next)=>({id,name,addr,del:{cl,pe},ret:{cl:rcl,pe:rpe},st,time,week,next});
+// Придуманные кафе Махачкалы. Все данные стартуют с нуля.
+// st: none — нет заказа, ordered — заказ ждёт курьера, wait — курьер привёз, ждём подтверждения кафе, ok — получено
 const CAFES=[
-  C(1,"Кофейня «Каспий»","ул. Дахадаева, 21",13,2,"go","",0,0,18,null),
-  C(2,"Barhan Coffee","пр. Расула Гамзатова, 43",10,8,"ok","08:12",1,0,5,{cl:12,pe:8}),
-  C(3,"Кафе «Утро»","пр. Имама Шамиля, 8",6,6,"go","",0,0,4,null),
-  C(4,"Кофейня «Чашка»","ул. Ярагского, 64",8,4,"ok","08:31",2,1,21,{cl:6,pe:3}),
-  C(5,"Кафе «Сарахан»","ул. Коркмасова, 12",12,6,"ok","08:47",0,0,3,{cl:12,pe:8}),
-  C(6,"Горец Coffee","пр. Петра I, 59",9,5,"go","",0,0,7,{cl:10,pe:5}),
-  C(7,"Кофейня «Маяк»","ул. Буйнакского, 5",7,7,"ok","09:05",2,0,12,null),
-  C(8,"Кафе «Зерно»","ул. М. Гаджиева, 176",10,4,"go","",0,0,6,{cl:10,pe:6}),
-  C(9,"Кафе «Нур»","пр. Акушинского, 30",6,3,"ok","09:20",0,0,2,{cl:8,pe:4}),
-  C(10,"Кофейня «Бриз»","ул. Пушкина, 14",8,8,"go","",0,0,15,null)
-];
-CAFES.forEach((c,i)=>c.no=1411+i);
-const S={role:"owner",cafe:1,cart:{cl:0,pe:0},f:"all",qs:""};
+  ["Кофейня «Каспий»","ул. Дахадаева, 21"],["Barhan Coffee","пр. Расула Гамзатова, 43"],["Кафе «Утро»","пр. Имама Шамиля, 8"],
+  ["Кофейня «Чашка»","ул. Ярагского, 64"],["Кафе «Сарахан»","ул. Коркмасова, 12"],["Горец Coffee","пр. Петра I, 59"],
+  ["Кофейня «Маяк»","ул. Буйнакского, 5"],["Кафе «Зерно»","ул. М. Гаджиева, 176"],["Кафе «Нур»","пр. Акушинского, 30"],["Кофейня «Бриз»","ул. Пушкина, 14"]
+].map(([name,addr],i)=>({id:i+1,name,addr,order:null,ret:{cl:0,pe:0},st:"none",time:"",no:0,queue:0,hist:[]}));
+const S={role:"owner",cafe:1,cart:{cl:0,pe:0},f:"all",qs:"",pick:0,nextNo:1001,queue:0};
 
 const $=s=>document.querySelector(s);
 const rub=n=>n.toLocaleString("ru-RU")+" ₽";
-const q=o=>o.cl+o.pe;
+const q=o=>o?o.cl+o.pe:0;
 const sum=o=>q(o)*PRICE;
-const pay=c=>sum(c.del)-sum(c.ret);
+const pay=c=>sum(c.order)-sum(c.ret);
 const byId=id=>CAFES.find(c=>c.id===+id);
 const now=()=>new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
 const tag=p=>`<span class="tag"><i class="dot ${p.id}"></i>${p.name}</span>`;
@@ -234,153 +226,130 @@ const thumbs=()=>P.map(p=>`<th class="c"><img class="th-img ${p.id}" src="${p.im
 const legend=()=>`<div class="legend">${P.map(p=>`<span class="tag"><img class="th-img ${p.id}" src="${p.img}" alt="">${p.name}</span>`).join("")}<span>по ${PRICE} ₽ за штуку</span></div>`;
 const EYE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
 const sees=t=>`<div class="who-sees">${EYE}<div>${t}</div></div>`;
-function status(c){return c.st==="ok"?`<span class="st ok">✓ Привезли в ${c.time}</span>`:c.st==="wait"?`<span class="st go">Ждём, пока кафе подтвердит</span>`:`<span class="st go">Курьер едет</span>`}
-function toast(t){const e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,2400)}
+const retWhat=r=>P.filter(p=>r[p.id]).map(p=>`${p.name} ${r[p.id]}`).join(", ");
+// Процент возвратов кафе по всем его доставкам
+function retPct(c){let d=0,r=0;c.hist.forEach(h=>{d+=q(h.order);r+=q(h.ret)});return d?Math.round(r/d*100):null}
+function status(c){return {none:`<span class="st no">Нет заказа</span>`,ordered:`<span class="st go">Ждёт курьера</span>`,
+  wait:`<span class="st go">Привезли, ждём подтверждения</span>`,ok:`<span class="st ok">✓ Получили в ${c.time}</span>`}[c.st]}
+function toast(t){const e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,2600)}
 function cnt(key,val){return `<span class="cnt"><button aria-label="Меньше" data-act="n" data-k="${key}" data-d="-1">−</button><output class="num">${val}</output><button aria-label="Больше" data-act="n" data-k="${key}" data-d="1">+</button></span>`}
 
 /* ========== ВЛАДЕЛЕЦ ========== */
+const FLT=[
+  ["all","Все",()=>true],
+  ["none","Не заказали",c=>c.st==="none"],
+  ["way","Ждут доставку",c=>c.st==="ordered"||c.st==="wait"],
+  ["ok","Получили",c=>c.st==="ok"],
+  ["ret","Много возвратов",c=>(retPct(c)??0)>=10]
+];
 function vOwner(){
-  const done=CAFES.filter(c=>c.st==="ok"),tot={cl:0,pe:0},rt={cl:0,pe:0};
-  CAFES.forEach(c=>{tot.cl+=c.del.cl;tot.pe+=c.del.pe;if(c.st==="ok"){rt.cl+=c.ret.cl;rt.pe+=c.ret.pe}});
-  const money=done.reduce((a,c)=>a+pay(c),0);
-  let h=sees(`Это экран <b>владельца</b>. Все кафе в одной таблице — кто что получил, сколько вернул и сколько заплатит. Всё обновляется само.`)+
+  const ordered=CAFES.filter(c=>c.st!=="none").length;
+  let del=0,ret={cl:0,pe:0},money=0;
+  CAFES.forEach(c=>c.hist.forEach(h=>{del++;ret.cl+=h.ret.cl;ret.pe+=h.ret.pe;money+=h.pay}));
+  let h=sees(`Это экран <b>владельца</b>. Все кафе в одной таблице: кто заказал, что привезли, сколько вернули и сколько заплатят.${ordered?"":" Пока заказов нет — откройте вкладку <b>«Кафе»</b> и сделайте первый заказ."}`)+
   `<div class="sum">
-    <div class="box"><span>Привезли</span><b class="num">${done.length} из ${CAFES.length}</b></div>
-    <div class="box"><span>Вернули</span><b class="num ret">${q(rt)} шт</b><span class="num">Кл ${rt.cl} · Пеп ${rt.pe}</span></div>
+    <div class="box"><span>Заказали</span><b class="num">${ordered} из ${CAFES.length}</b></div>
+    <div class="box"><span>Доставок</span><b class="num">${del}</b></div>
+    <div class="box"><span>Вернули</span><b class="num ret">${q(ret)} шт</b><span class="num">Классика ${ret.cl} · Пепперони ${ret.pe}</span></div>
     <div class="box"><span>Заплатят</span><b class="num">${rub(money)}</b></div></div>
 
   <div class="tools">
     <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <input id="own-q" type="search" placeholder="Найти кафе или улицу" value="${S.qs.replace(/"/g,"&quot;")}" autocomplete="off"></label>
-    <div class="chips" id="chips">${chips()}</div>
+    <div class="lbl">Ваши кафе — нажмите, чтобы открыть</div>
+    <div class="chips cafes">${CAFES.map(c=>`<button data-act="pickcafe" data-id="${c.id}" aria-pressed="${S.pick===c.id}"><i class="${c.st}"></i>${c.name}</button>`).join("")}</div>
+    <div class="lbl">Показать</div>
+    <div class="chips">${FLT.map(([id,l,f])=>`<button data-act="flt" data-id="${id}" aria-pressed="${!S.pick&&S.f===id}">${l} <span class="num">${CAFES.filter(f).length}</span></button>`).join("")}</div>
   </div>
-  <div id="ot">${ownerTables()}</div>`;
+  <div id="ot">${ownerTable()}</div>`;
   return h;
 }
-
-// Фильтры владельца: с 65 кафе сначала смотрят на проблемные
-const FLT=[
-  ["all","Все",()=>true],
-  ["prob","Проблемы",c=>probScore(c)>0],
-  ["way","Ещё не привезли",c=>c.st!=="ok"],
-  ["nonext","Не заказали",c=>!c.next],
-  ["ret","Много возвратов",c=>c.week>=10]
-];
-const probScore=c=>(c.next?0:1)+(c.week>=10?1:0)+(c.st!=="ok"?1:0);
 function listed(){
+  if(S.pick) return CAFES.filter(c=>c.id===S.pick);
   const f=FLT.find(x=>x[0]===S.f)[2], s=S.qs.trim().toLowerCase();
-  let L=CAFES.filter(c=>f(c)&&(!s||(c.name+" "+c.addr).toLowerCase().includes(s)));
-  if(S.f==="prob") L=[...L].sort((a,b)=>probScore(b)-probScore(a));
-  return L;
+  return CAFES.filter(c=>f(c)&&(!s||(c.name+" "+c.addr).toLowerCase().includes(s)));
 }
-function chips(){return FLT.map(([id,l,f])=>`<button data-act="flt" data-id="${id}" aria-pressed="${S.f===id}" class="${id!=="all"?"warn":""}">${l} <span class="num">${CAFES.filter(f).length}</span></button>`).join("")}
-function probWhy(c){return [!c.next&&"не заказали",c.week>=10&&"много возвратов",c.st!=="ok"&&"ещё не привезли"].filter(Boolean).join(" · ")}
-
-function ownerTables(){
+function ownerTable(){
   const L=listed();
-  if(!L.length) return `<div class="box empty">Ничего не нашлось. <button class="lnk" data-act="reset">Показать все кафе</button></div>`;
+  if(!L.length) return `<div class="box empty" style="margin-top:14px">Здесь пока никого. <button class="lnk" data-act="reset">Показать все кафе</button></div>`;
   const tot={cl:0,pe:0},rt={cl:0,pe:0};let money=0;
-  L.forEach(c=>{tot.cl+=c.del.cl;tot.pe+=c.del.pe;if(c.st==="ok"){rt.cl+=c.ret.cl;rt.pe+=c.ret.pe;money+=pay(c)}});
-  const shown=L.length<CAFES.length?`<p class="sub">Показано ${L.length} из ${CAFES.length} · <button class="lnk" data-act="reset">показать все</button></p>`:"";
-  let h=`${shown}<h2>Сегодня развозим</h2>${legend()}
+  L.forEach(c=>{if(c.order){tot.cl+=c.order.cl;tot.pe+=c.order.pe}if(c.st==="ok"){rt.cl+=c.ret.cl;rt.pe+=c.ret.pe;money+=pay(c)}});
+  const shown=L.length<CAFES.length?`<p class="sub" style="margin-top:12px">Показано ${L.length} из ${CAFES.length} · <button class="lnk" data-act="reset">показать все</button></p>`:"";
+  let h=`${shown}<h2>Заказы сегодня</h2>${legend()}
   <div class="tw"><table class="num"><thead><tr>
     <th>Кафе</th>${thumbs()}<th class="c">Назад</th><th class="r">Сумма</th>
   </tr></thead><tbody>`;
-  L.forEach(c=>{const r=q(c.ret),ok=c.st==="ok";
-    h+=`<tr class="${ok?"done":""}"><td><b>${c.name}</b><span class="addr">${c.addr}</span>${status(c)}</td>
-    ${P.map(p=>`<td class="c">${c.del[p.id]}${ok&&c.ret[p.id]?`<span class="rsub">−${c.ret[p.id]}</span>`:""}</td>`).join("")}
-    <td class="c">${ok?(r?`<span class="ret">${r}</span>`:"0"):`<span class="dash">—</span>`}</td>
-    <td class="r">${ok?`<button class="lnk" data-act="inv" data-id="${c.id}">${rub(pay(c))}</button>`:`<span class="dash">—</span>`}</td></tr>`});
-  h+=`</tbody><tfoot><tr><td>Всего</td><td class="c">${tot.cl}</td><td class="c">${tot.pe}</td><td class="c ret">${q(rt)}</td><td class="r">${rub(money)}</td></tr></tfoot></table></div>
+  L.forEach(c=>{const ok=c.st==="ok",o=c.order,p=retPct(c);
+    h+=`<tr class="${ok?"done":""}"><td><b>${c.name}</b><span class="addr">${c.addr}</span>${status(c)}${p!==null?`<span class="addr">возвраты всего: <span class="${p>=10?"ret":""}">${p}%</span></span>`:""}</td>
+    ${P.map(pr=>`<td class="c">${o?o[pr.id]:`<span class="dash">—</span>`}${ok&&c.ret[pr.id]?`<span class="rsub">−${c.ret[pr.id]}</span>`:""}</td>`).join("")}
+    <td class="c">${ok?(q(c.ret)?`<span class="ret">${q(c.ret)}</span>`:"0"):`<span class="dash">—</span>`}</td>
+    <td class="r">${ok?`<button class="lnk" data-act="inv" data-id="${c.id}">${rub(pay(c))}</button>`:o?`<span class="addr">${rub(sum(o))}</span>`:`<span class="dash">—</span>`}</td></tr>`});
+  h+=`</tbody><tfoot><tr><td>Всего${L.length<CAFES.length?" (показано)":""}</td><td class="c">${tot.cl}</td><td class="c">${tot.pe}</td><td class="c ret">${q(rt)}</td><td class="r">${rub(money)}</td></tr></tfoot></table></div>
   <p class="sub" style="margin-top:6px">Красная цифра под количеством — сколько этой закуски вернули. Нажмите на сумму — откроется накладная.</p>`;
-
-  const nx=L.filter(c=>c.next),nt={cl:0,pe:0};nx.forEach(c=>{nt.cl+=c.next.cl;nt.pe+=c.next.pe});
-  h+=`<h2>Заказали на завтра</h2><p class="sub">Заказы принимаются до 20:00 · заказали ${CAFES.filter(c=>c.next).length} из ${CAFES.length}</p>
-  <div class="tw"><table class="num"><thead><tr>
-    <th>Кафе</th>${thumbs()}<th class="c">Как продают</th>
-  </tr></thead><tbody>`;
-  L.forEach(c=>{const hi=c.week>=10;
-    h+=`<tr><td><b>${c.name}</b><span class="addr">${c.addr}</span>${S.f==="prob"?`<span class="why">${probWhy(c)}</span>`:""}</td>
-    ${c.next?`<td class="c">${c.next.cl}</td><td class="c">${c.next.pe}</td>`:`<td class="c" colspan="2"><span class="st no">Ещё не заказали</span></td>`}
-    <td class="c"><span class="sell ${hi?"hi":"lo"}">${hi?`Везти<br>меньше`:"Хорошо"}</span><span class="addr">${c.week}% назад</span></td></tr>`});
-  h+=`</tbody><tfoot><tr><td>Нужно испечь</td><td class="c">${nt.cl}</td><td class="c">${nt.pe}</td><td></td></tr></tfoot></table></div>`;
   return h;
 }
 
 /* ========== КАФЕ ========== */
 function vCafe(){
   const c=byId(S.cafe);
-  let h=sees(`Это экран <b>кафе</b>. Здесь кафе заказывает закуски на завтра и подтверждает, что курьер всё привёз.`)+
-  `<div class="box pick"><label for="cafe-pick">Вы —</label><select id="cafe-pick" data-act="pick">${CAFES.map(x=>`<option value="${x.id}" ${x.id===c.id?"selected":""}>${x.name}</option>`).join("")}</select></div>
-  <p class="sub" style="margin-top:6px">В настоящем боте выбирать не нужно: кафе узнаётся само, адрес подставляется сам.</p>
+  let h=sees(`Это экран <b>кафе</b>. Кафе заказывает закуски, а когда курьер привёз — подтверждает одной кнопкой.`)+
+  `<div class="box pick"><label for="cafe-pick">Вы —</label><select id="cafe-pick">${CAFES.map(x=>`<option value="${x.id}" ${x.id===c.id?"selected":""}>${x.name}</option>`).join("")}</select></div>
+  <p class="sub" style="margin-top:6px">${c.addr}, Махачкала. В настоящем боте выбирать не нужно: кафе узнаётся само, адрес подставляется сам.</p>`;
 
-  <h2>Сегодня</h2>`;
-  if(c.st==="wait"){
-    h+=`<div class="box msg ask"><b>Курьер привёз заказ. Всё верно?</b>
-      <div class="lines num">${P.map(p=>`<div>${tag(p)}<span>${c.del[p.id]} шт</span></div>`).join("")}
+  if(c.st==="none"){
+    h+=`<h2>Заказать закуски</h2><p class="sub">${PRICE} ₽ за штуку · нажмите «+»</p>
+    <div class="box">${P.map(p=>`<div class="prod"><img src="${p.img}" alt="${p.name}"><div class="t">${tag(p)}<span>${p.comp}</span></div>${cnt(p.id,S.cart[p.id])}</div>`).join("")}</div>
+    <button class="btn" data-act="order" ${q(S.cart)?"":"disabled"}>${q(S.cart)?`Отправить заказ · ${q(S.cart)} шт · ${rub(sum(S.cart))}`:"Выберите количество"}</button>`;
+  } else if(c.st==="ordered"){
+    h+=`<h2>Ваш заказ</h2><div class="box msg go">Заказ №${c.no} принят и ждёт курьера:<div class="lines num">${P.map(p=>`<div>${tag(p)}<span>${c.order[p.id]} шт</span></div>`).join("")}<div class="tot"><span>Сумма</span><span>${rub(sum(c.order))}</span></div></div></div>
+    <button class="btn line" data-act="edit">Изменить заказ</button>`;
+  } else if(c.st==="wait"){
+    h+=`<h2>Курьер привёз заказ</h2><div class="box msg ask"><b>Всё верно?</b>
+      <div class="lines num">${P.map(p=>`<div>${tag(p)}<span>${c.order[p.id]} шт</span></div>`).join("")}
       ${P.filter(p=>c.ret[p.id]).map(p=>`<div class="ret"><span>Возврат: ${p.name}</span><span>${c.ret[p.id]} шт · −${rub(c.ret[p.id]*PRICE)}</span></div>`).join("")}
       <div class="tot"><span>К оплате</span><span>${rub(pay(c))}</span></div></div>
       <button class="btn gr" data-act="confirm">Да, всё верно</button></div>`;
-  } else if(c.st==="ok"){
-    h+=`<div class="box msg ok">✓ Заказ получен в ${c.time}. <button class="lnk" data-act="inv" data-id="${c.id}">Накладная · ${rub(pay(c))}</button></div>`;
   } else {
-    h+=`<div class="box msg go">Курьер едет к вам: ${P.map(p=>`${p.name} ${c.del[p.id]} шт`).join(", ")}</div>`;
+    h+=`<h2>Ваш заказ</h2><div class="box msg ok">✓ Заказ №${c.no} получен в ${c.time}. <button class="lnk" data-act="inv" data-id="${c.id}">Накладная · ${rub(pay(c))}</button></div>
+    <button class="btn line" data-act="again">Сделать новый заказ</button>`;
   }
 
-  // История поставок кафе с возвратами
-  const hist=history(c),ht={del:0,ret:0,pay:0};
-  hist.forEach(r=>{ht.del+=r.del;ht.ret+=r.ret;ht.pay+=r.pay});
-  h+=`<h2>Мои поставки за неделю</h2><p class="sub">Сколько привезли, сколько вернули и сколько заплатили</p>
-  <div class="tw"><table class="num"><thead><tr><th>День</th><th class="c">Привезли</th><th class="c">Вернули</th><th class="r">Заплатили</th></tr></thead><tbody>
-  ${hist.map(r=>`<tr><td><b>${r.day}</b>${r.ret?`<span class="addr">${r.what}</span>`:""}</td><td class="c">${r.del}</td><td class="c">${r.ret?`<span class="ret">${r.ret}</span>`:"0"}</td><td class="r">${rub(r.pay)}</td></tr>`).join("")}
-  </tbody><tfoot><tr><td>За неделю</td><td class="c">${ht.del}</td><td class="c ret">${ht.ret}</td><td class="r">${rub(ht.pay)}</td></tr></tfoot></table></div>`;
-
-  h+=`<h2>Заказ на завтра</h2><p class="sub">До 20:00 · ${PRICE} ₽ за штуку</p>`;
-  if(c.next){
-    h+=`<div class="box msg ok">✓ Заказ отправлен: Классика ${c.next.cl}, Пепперони ${c.next.pe} · ${rub(sum(c.next))}</div>
-    <button class="btn line" data-act="edit">Изменить заказ</button>`;
-  } else {
-    h+=`<div class="box">${P.map(p=>`<div class="prod"><img src="${p.img}" alt="${p.name}"><div class="t">${tag(p)}<span>${p.comp}</span></div>${cnt(p.id,S.cart[p.id])}</div>`).join("")}</div>
-    <button class="btn" data-act="order" ${q(S.cart)?"":"disabled"}>${q(S.cart)?`Отправить заказ · ${q(S.cart)} шт · ${rub(sum(S.cart))}`:"Нажмите «+», чтобы выбрать"}</button>`;
+  h+=`<h2>Мои поставки</h2><p class="sub">Сколько привезли, сколько вернули и сколько заплатили</p>`;
+  if(!c.hist.length){h+=`<div class="box empty">Пока поставок нет. Они появятся здесь, когда курьер привезёт заказ.</div>`}
+  else{
+    const t={d:0,r:0,p:0};c.hist.forEach(x=>{t.d+=q(x.order);t.r+=q(x.ret);t.p+=x.pay});
+    h+=`<div class="tw"><table class="num"><thead><tr><th>Заказ</th><th class="c">Привезли</th><th class="c">Вернули</th><th class="r">Заплатили</th></tr></thead><tbody>
+    ${c.hist.map(x=>`<tr><td><b>№${x.no}</b> · ${x.time}${q(x.ret)?`<span class="addr ret">${retWhat(x.ret)}</span>`:""}</td><td class="c">${q(x.order)}</td><td class="c">${q(x.ret)?`<span class="ret">${q(x.ret)}</span>`:"0"}</td><td class="r">${rub(x.pay)}</td></tr>`).join("")}
+    </tbody><tfoot><tr><td>Итого</td><td class="c">${t.d}</td><td class="c ret">${t.r}</td><td class="r">${rub(t.p)}</td></tr></tfoot></table></div>`;
   }
   return h;
 }
 
-// Примерная история за 5 прошлых дней (+ сегодня, если уже привезли). Возвраты — по проценту кафе
-function history(c){
-  const rows=[],fmt=d=>d.toLocaleDateString("ru-RU",{day:"numeric",month:"short",weekday:"short"});
-  if(c.st==="ok"){rows.push({day:"Сегодня",del:q(c.del),ret:q(c.ret),pay:pay(c),what:retWhat(c.ret)})}
-  for(let i=1;i<=5;i++){
-    const d=new Date();d.setDate(d.getDate()-i);
-    const dl={cl:Math.max(1,c.del.cl+((c.id*3+i)%3)-1),pe:Math.max(1,c.del.pe+((c.id+i)%3)-1)};
-    const n=Math.round(q(dl)*c.week/100*(0.6+((c.id+i*7)%5)/5));
-    const r={cl:Math.min(dl.cl,Math.ceil(n*.6)),pe:0};r.pe=Math.min(dl.pe,n-r.cl);
-    rows.push({day:fmt(d),del:q(dl),ret:q(r),pay:sum(dl)-sum(r),what:retWhat(r)});
-  }
-  return rows;
-}
-const retWhat=r=>P.filter(p=>r[p.id]).map(p=>`${p.name} ${r[p.id]}`).join(", ");
-
 /* ========== КУРЬЕР ========== */
 function vCourier(){
-  const nxt=CAFES.find(c=>c.st==="go"), left=CAFES.filter(c=>c.st==="go").length;
+  const route=CAFES.filter(c=>c.st!=="none"||c.hist.length).sort((a,b)=>(a.queue||1e9)-(b.queue||1e9));
+  const todo=route.filter(c=>c.st==="ordered"), nxt=todo[0];
   let h=sees(`Это экран <b>курьера</b>. Он видит, куда ехать и что отдать. На месте отмечает, сколько забрал назад, и жмёт «Доставил».`);
+  if(!route.length) return h+`<div class="box empty" style="margin-top:16px">Заказов пока нет.<br>Откройте вкладку <b>«Кафе»</b> и сделайте заказ — он сразу появится здесь.</div>`;
   if(nxt){
-    h+=`<h2>Следующая точка</h2><p class="sub">Осталось ${left} из ${CAFES.length}</p>
-    <div class="box next"><div class="lbl">Едем сюда</div><h3>${nxt.name}</h3><div class="a">${nxt.addr}</div>
-      <div class="give num">${P.map(p=>`<div>${tag(p)}<b>${nxt.del[p.id]}</b></div>`).join("")}</div>
+    h+=`<h2>Следующая точка</h2><p class="sub">Осталось развезти: ${todo.length}</p>
+    <div class="box next"><div class="k">Едем сюда</div><h3>${nxt.name}</h3><div class="a">${nxt.addr}</div>
+      <div class="give num">${P.map(p=>`<div>${tag(p)}<b>${nxt.order[p.id]}</b></div>`).join("")}</div>
       <div class="back"><p>Сколько непроданных забрал назад?</p>
         ${P.map(p=>`<div class="row">${tag(p)}${cnt(nxt.id+":"+p.id,nxt.ret[p.id])}</div>`).join("")}</div>
       <button class="btn" data-act="done" data-id="${nxt.id}">Доставил · к оплате ${rub(pay(nxt))}</button></div>`;
   } else {
-    h+=`<div class="box finish" style="margin-top:16px"><b>✓ Маршрут закончен</b><p class="sub" style="margin:4px 0 0">Все кафе получили заказ.</p></div>`;
+    h+=`<div class="box empty" style="margin-top:16px"><b style="color:var(--green-ink)">✓ Все заказы развезены</b></div>`;
   }
-  const back={cl:0,pe:0};CAFES.filter(c=>c.st!=="go").forEach(c=>{back.cl+=c.ret.cl;back.pe+=c.ret.pe});
+  const back={cl:0,pe:0};CAFES.forEach(c=>c.hist.forEach(x=>{back.cl+=x.ret.cl;back.pe+=x.ret.pe}));
+  CAFES.filter(c=>c.st==="wait").forEach(c=>{back.cl+=c.ret.cl;back.pe+=c.ret.pe});
   h+=`<h2>Возврат в машине</h2><p class="sub">Это нужно сдать в цех в конце дня</p>
   <div class="give num">${P.map(p=>`<div class="box">${tag(p)}<b class="ret">${back[p.id]}</b></div>`).join("")}</div>
-  <h2>Весь маршрут</h2><div class="box allr">`;
-  CAFES.forEach((c,i)=>{
-    h+=`<div class="li"><div><b>${i+1}. ${c.name}</b><span class="a">${c.addr}${c.st!=="go"&&q(c.ret)?` · <span class="ret">возврат ${retWhat(c.ret)}</span>`:""}</span></div>${c.st==="ok"?`<span class="st ok">✓ ${c.time}</span>`:c.st==="wait"?`<span class="st go">Ждём кафе</span>`:c===nxt?`<span class="st go">Едем сейчас</span>`:`<span class="st no">Впереди</span>`}</div>`;
+  <h2>Мой маршрут</h2><div class="box allr">`;
+  route.forEach((c,i)=>{
+    const r=c.st==="wait"||c.st==="ok"?c.ret:null;
+    h+=`<div class="li"><div><b>${i+1}. ${c.name}</b><span class="a">${c.addr}${r&&q(r)?` · <span class="ret">возврат ${retWhat(r)}</span>`:""}</span></div>${
+      c.st==="ok"?`<span class="st ok">✓ ${c.time}</span>`:c.st==="wait"?`<span class="st go">Ждём кафе</span>`:c===nxt?`<span class="st go">Едем сейчас</span>`:c.st==="ordered"?`<span class="st no">Впереди</span>`:`<span class="st ok">✓ готово</span>`}</div>`;
   });
   return h+`</div>`;
 }
@@ -392,8 +361,8 @@ function invoice(id){
     <div class="hd"><span class="logo">PANINO</span><span class="num" style="font-size:13px">Накладная №${c.no}</span></div>
     <div class="meta">${new Date().toLocaleDateString("ru-RU")} · <b>${c.name}</b>, ${c.addr}</div>
     <table class="num"><thead><tr><th>Наименование</th><th class="c">Кол-во</th><th class="c">Цена</th><th class="r">Сумма</th></tr></thead><tbody>
-    ${P.map(p=>`<tr><td>${p.name}</td><td class="c">${c.del[p.id]}</td><td class="c">${PRICE}</td><td class="r">${(c.del[p.id]*PRICE).toLocaleString("ru-RU")}</td></tr>`).join("")}</tbody></table>
-    <div class="ln num"><span>Итого</span><span>${rub(sum(c.del))}</span></div>
+    ${P.map(p=>`<tr><td>${p.name}</td><td class="c">${c.order[p.id]}</td><td class="c">${PRICE}</td><td class="r">${(c.order[p.id]*PRICE).toLocaleString("ru-RU")}</td></tr>`).join("")}</tbody></table>
+    <div class="ln num"><span>Итого</span><span>${rub(sum(c.order))}</span></div>
     ${q(c.ret)?`<div class="ln num ret"><span>Возврат ${q(c.ret)} шт</span><span>−${rub(sum(c.ret))}</span></div>`:""}
     <div class="pay num"><span>К оплате</span><span>${rub(pay(c))}</span></div>
     <div class="sg"><div>Сдал<b>✓ Курьер Магомед</b>${c.time}</div><div>Принял<b>✓ ${c.name}</b>в боте</div></div>
@@ -404,25 +373,29 @@ function invoice(id){
 
 function render(){
   document.querySelectorAll(".roles button").forEach(b=>b.setAttribute("aria-selected",b.dataset.role===S.role));
+  const n=CAFES.filter(c=>c.st==="ordered").length,bd=$("#cour-badge");bd.hidden=!n;bd.textContent=n;
   $("#view").innerHTML=S.role==="owner"?vOwner():S.role==="cafe"?vCafe():vCourier();
 }
-// Поиск перерисовывает только таблицы, чтобы поле ввода не теряло фокус
-document.addEventListener("input",e=>{if(e.target.id==="own-q"){S.qs=e.target.value;$("#ot").innerHTML=ownerTables()}});
+// Поиск перерисовывает только таблицу, чтобы поле ввода не теряло фокус
+document.addEventListener("input",e=>{if(e.target.id==="own-q"){S.qs=e.target.value;S.pick=0;$("#ot").innerHTML=ownerTable()}});
 document.addEventListener("change",e=>{if(e.target.id==="cafe-pick"){S.cafe=+e.target.value;S.cart={cl:0,pe:0};render()}});
 document.addEventListener("click",e=>{
   if(e.target.id==="sheet"){$("#sheet").hidden=true;return}
+  if(e.target.id==="restart"){location.reload();return}
   const b=e.target.closest("button");if(!b)return;
   if(b.dataset.role){S.role=b.dataset.role;render();scrollTo(0,0);return}
   const a=b.dataset.act,d=+b.dataset.d;
   if(a==="n"){const k=b.dataset.k;
-    if(k.includes(":")){const[id,p]=k.split(":"),c=byId(id);c.ret[p]=Math.min(c.del[p],Math.max(0,c.ret[p]+d))}
+    if(k.includes(":")){const[id,p]=k.split(":"),c=byId(id);c.ret[p]=Math.min(c.order[p],Math.max(0,c.ret[p]+d))}
     else S.cart[k]=Math.max(0,S.cart[k]+d)}
-  if(a==="order"){byId(S.cafe).next={...S.cart};S.cart={cl:0,pe:0};toast("Заказ отправлен — владелец уже видит его")}
-  if(a==="edit"){const c=byId(S.cafe);S.cart={...c.next};c.next=null}
-  if(a==="done"){const c=byId(b.dataset.id);c.st="wait";c.time=now();S.cafe=c.id;toast("Кафе получило сообщение «Всё верно?»")}
-  if(a==="confirm"){const c=byId(S.cafe);c.st="ok";render();invoice(c.id);return}
-  if(a==="flt"){S.f=b.dataset.id}
-  if(a==="reset"){S.f="all";S.qs=""}
+  if(a==="order"){const c=byId(S.cafe);c.order={...S.cart};c.ret={cl:0,pe:0};c.st="ordered";c.no=S.nextNo++;c.queue=++S.queue;S.cart={cl:0,pe:0};toast("Заказ отправлен. Он уже у курьера и у владельца")}
+  if(a==="edit"){const c=byId(S.cafe);S.cart={...c.order};c.order=null;c.st="none"}
+  if(a==="done"){const c=byId(b.dataset.id);c.st="wait";c.time=now();S.cafe=c.id;toast("Кафе получило вопрос «Всё верно?» — откройте вкладку «Кафе»")}
+  if(a==="confirm"){const c=byId(S.cafe);c.st="ok";c.hist.unshift({no:c.no,time:c.time,order:{...c.order},ret:{...c.ret},pay:pay(c)});render();invoice(c.id);return}
+  if(a==="again"){const c=byId(S.cafe);c.order=null;c.ret={cl:0,pe:0};c.st="none"}
+  if(a==="flt"){S.f=b.dataset.id;S.pick=0}
+  if(a==="pickcafe"){S.pick=S.pick===+b.dataset.id?0:+b.dataset.id}
+  if(a==="reset"){S.f="all";S.qs="";S.pick=0}
   if(a==="inv"){invoice(b.dataset.id);return}
   if(a==="close"){$("#sheet").hidden=true;return}
   render();
