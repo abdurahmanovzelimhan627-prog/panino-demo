@@ -13,7 +13,8 @@
 <style>
 /* Простая учётная таблица: кафе строками; крупные слова вместо терминов. Классика = зелёный, Пепперони = красный (как на упаковке) */
 :root{
-  --bg:#F5F3EF; --card:#FFFFFF; --ink:#1F1B17; --muted:#6F665D; --line:#E6E0D7; --head:#FAF8F5;
+  --bg:#F6F7F9; --card:#FFFFFF; --ink:#16181D; --muted:#6B7280; --line:#E8EAEF; --head:#F9FAFB;
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 6px 20px rgba(16,24,40,.06);
   --red:#C8261F; --red-soft:#FBE7E5;
   --green:#4E9A2A; --green-ink:#2F6B17; --green-soft:#EAF4E2;
   --amber:#93590A; --amber-soft:#FCEFD9;
@@ -25,15 +26,15 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#171513;--card:#211E1B;--ink:#F1ECE6;--muted:#A99F94;--line:#36302A;--head:#1C1917;
   --red:#E5554C;--red-soft:#3A1F1C;--green:#7CC456;--green-ink:#9BD67B;--green-soft:#1E2E17;
-  --amber:#F0B45A;--amber-soft:#3A2C15;--blue-soft:#1A2638;--blue-ink:#9CC0F0;color-scheme:dark}}
+  --amber:#F0B45A;--amber-soft:#3A2C15;--blue-soft:#1A2638;--blue-ink:#9CC0F0;--shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#171513;--card:#211E1B;--ink:#F1ECE6;--muted:#A99F94;--line:#36302A;--head:#1C1917;
   --red:#E5554C;--red-soft:#3A1F1C;--green:#7CC456;--green-ink:#9BD67B;--green-soft:#1E2E17;
-  --amber:#F0B45A;--amber-soft:#3A2C15;--blue-soft:#1A2638;--blue-ink:#9CC0F0;color-scheme:dark}
+  --amber:#F0B45A;--amber-soft:#3A2C15;--blue-soft:#1A2638;--blue-ink:#9CC0F0;--shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.45;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 .app{max-width:760px;margin:0 auto}
@@ -44,23 +45,25 @@ button:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-o
 
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:14px 12px}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.logo{font-family:var(--f-display);font-size:28px;letter-spacing:.14em;color:var(--red);line-height:1}
+.logo{font-family:var(--f-display);font-size:32px;letter-spacing:.14em;color:var(--red);line-height:1}
 .date{font-size:13px;color:var(--muted);text-align:right}
 .date b{display:block;color:var(--ink);font-size:14px}
-.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px;margin-top:12px}
-.roles button{padding:8px 4px;border-radius:10px;font-weight:700;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.15;position:relative}
-.roles button svg{width:22px;height:22px}
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:6px;margin-top:14px;box-shadow:var(--shadow)}
+.roles button{padding:10px 4px;border-radius:13px;font-weight:700;font-size:15px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.15;position:relative;transition:background .15s,color .15s}
+.roles button svg{width:24px;height:24px}
+.roles button[aria-selected="true"]{background:var(--red)!important;color:var(--on-accent)!important;box-shadow:0 6px 16px color-mix(in srgb,var(--red) 30%,transparent)}
+.roles button[aria-selected="true"] .badge{background:var(--on-accent);color:var(--red)}
 .roles button small{font-weight:500;font-size:11px}
 .roles button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
 .badge{position:absolute;top:4px;right:8px;min-width:18px;height:18px;border-radius:9px;background:var(--red);color:var(--on-accent);font-size:11px;font-weight:700;display:grid;place-items:center;padding:0 5px}
 
-.who-sees{display:flex;gap:10px;align-items:flex-start;background:var(--blue-soft);color:var(--ink);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:4px}
+.who-sees{display:flex;gap:10px;align-items:flex-start;background:var(--blue-soft);color:var(--ink);border-radius:16px;padding:12px 14px;font-size:15px;margin-top:6px}
 .who-sees b{color:var(--blue-ink)}
 .who-sees svg{width:20px;height:20px;flex:none;color:var(--blue-ink);margin-top:1px}
 
-h2{font-size:18px;font-weight:700;margin:22px 0 4px}
-.sub{color:var(--muted);font-size:13px;margin:0 0 10px}
-.box{background:var(--card);border:1px solid var(--line);border-radius:12px}
+h2{font-size:22px;font-weight:700;margin:28px 0 4px;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:14px;margin:0 0 12px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
 
 .tag{display:inline-flex;align-items:center;gap:6px;font-weight:600}
 .dot{width:10px;height:10px;border-radius:3px;flex:none}
@@ -70,20 +73,25 @@ h2{font-size:18px;font-weight:700;margin:22px 0 4px}
 .legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:13px;color:var(--muted);margin-bottom:10px}
 .legend .tag{color:var(--ink)} .legend .th-img{width:24px;height:24px}
 
-.sum{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
-.sum div{padding:10px 12px}
-.sum span{font-size:12px;color:var(--muted);display:block}
-.sum b{font-size:20px}
+.sum{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.sum>div{padding:14px 16px;display:grid;gap:2px}
+.sum span{font-size:13px;color:var(--muted);display:block}
+.sum b{font-size:28px;letter-spacing:-.02em;line-height:1.15}
+.ki{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;margin-bottom:6px}
+.ki svg{width:20px;height:20px}
+.ki.a{background:var(--blue-soft);color:var(--blue-ink)} .ki.b{background:var(--amber-soft);color:var(--amber)}
+.ki.c{background:var(--red-soft);color:var(--red)} .ki.d{background:var(--green-soft);color:var(--green-ink)}
+@media (min-width:640px){.sum{grid-template-columns:repeat(4,1fr)}}
 
 /* Поиск, список кафе, фильтры */
 .tools{display:grid;gap:10px;margin-top:16px}
-.search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0 12px}
+.search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:2px 14px;box-shadow:var(--shadow)}
 .search svg{width:18px;height:18px;color:var(--muted);flex:none}
 .search input{flex:1;min-width:0;border:0;background:none;padding:12px 0;font-size:16px;color:var(--ink);outline:none}
 .search:focus-within{border-color:var(--ink)}
 .lbl{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips button{padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:13px;font-weight:600}
+.chips button{padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:14px;font-weight:600;box-shadow:0 1px 2px rgba(16,24,40,.04)}
 .chips button span{color:var(--muted);font-weight:700;margin-left:2px}
 .chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .chips button[aria-pressed="true"] span{color:inherit;opacity:.75}
@@ -94,10 +102,11 @@ h2{font-size:18px;font-weight:700;margin:22px 0 4px}
 .empty{padding:18px;text-align:center;color:var(--muted);font-size:14px}
 
 /* Таблица */
-.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th{background:var(--head);font-size:12px;font-weight:600;color:var(--muted);text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);line-height:1.2}
-td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:18px;background:var(--card);box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{background:var(--head);font-size:13px;font-weight:600;color:var(--muted);text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);line-height:1.2}
+td{padding:13px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:hover td{background:var(--head)}
 td:first-child{width:46%}
 tr:last-child td{border-bottom:0}
 td.c,th.c{text-align:center} td.r,th.r{text-align:right}
@@ -114,8 +123,8 @@ tfoot td{background:var(--head);font-weight:700;border-top:1px solid var(--line)
 .rsub{display:block;font-size:11px;font-weight:700;color:var(--red);line-height:1.1}
 .lnk{color:var(--red);font-weight:600;font-size:13px;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
 
-.cnt{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;background:var(--card);flex:none}
-.cnt button{width:40px;height:40px;font-size:20px;font-weight:600}
+.cnt{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:14px;background:var(--head);flex:none}
+.cnt button{width:42px;height:42px;font-size:22px;font-weight:600;color:var(--red)}
 .cnt output{min-width:30px;text-align:center;font-weight:700;font-size:16px}
 
 /* Кафе */
@@ -127,7 +136,19 @@ tfoot td{background:var(--head);font-weight:700;border-top:1px solid var(--line)
 .prod img{width:64px;height:64px;object-fit:cover;border-radius:10px;flex:none;background:var(--head)}
 .prod .t{flex:1;min-width:0}
 .prod .t span{display:block;font-size:12px;color:var(--muted)}
-.btn{width:100%;padding:14px;border-radius:12px;font-weight:700;font-size:16px;background:var(--red);color:var(--on-accent);margin-top:12px}
+.btn{width:100%;padding:16px;border-radius:16px;font-weight:700;font-size:17px;background:var(--red);color:var(--on-accent);margin-top:14px;box-shadow:0 8px 20px color-mix(in srgb,var(--red) 28%,transparent)}
+.btn.gr{box-shadow:0 8px 20px color-mix(in srgb,var(--green-ink) 28%,transparent)}
+.btn.line,.btn[disabled]{box-shadow:none}
+/* Кафе: крупные карточки товаров, как в магазине */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pcard{overflow:hidden;display:flex;flex-direction:column}
+.pcard img{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--head);display:block}
+.pcard .pb{padding:12px 12px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.pcard .pb>span{font-size:13px;color:var(--muted);flex:1}
+.pcard .pr{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:8px;flex-wrap:wrap}
+.pcard .pr b{font-size:18px}
+.pcard .cnt button{width:36px;height:38px}
+.pcard .cnt output{min-width:24px}
 .btn.gr{background:var(--green-ink)}
 .btn.line{background:var(--card);color:var(--ink);border:1px solid var(--line);font-weight:600;font-size:15px}
 .btn[disabled]{background:var(--line);color:var(--muted);cursor:default}
@@ -174,7 +195,7 @@ tfoot td{background:var(--head);font-weight:700;border-top:1px solid var(--line)
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;z-index:30;max-width:calc(100% - 32px)}
 .foot{font-size:12px;color:var(--muted);margin-top:18px;text-align:center;display:grid;gap:8px;justify-items:center}
 .foot button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 14px;font-weight:600;font-size:13px;color:var(--ink)}
-@media (max-width:520px){.sum b{font-size:18px} th,td{padding:9px 4px} th:first-child,td:first-child{padding-left:10px} th:last-child,td:last-child{padding-right:10px}
+@media (max-width:520px){.sum b{font-size:22px} th,td{padding:11px 4px} th:first-child,td:first-child{padding-left:10px} th:last-child,td:last-child{padding-right:10px}
   td:first-child{width:auto} .th-img{width:26px;height:26px} table{font-size:13px} .lnk{font-size:12px} td .st{font-size:11px;padding:2px 6px}}
 </style>
 
@@ -248,10 +269,10 @@ function vOwner(){
   CAFES.forEach(c=>c.hist.forEach(h=>{del++;ret.cl+=h.ret.cl;ret.pe+=h.ret.pe;money+=h.pay}));
   let h=sees(`Это экран <b>владельца</b>. Все кафе в одной таблице: кто заказал, что привезли, сколько вернули и сколько заплатят.${ordered?"":" Пока заказов нет — откройте вкладку <b>«Кафе»</b> и сделайте первый заказ."}`)+
   `<div class="sum">
-    <div class="box"><span>Заказали</span><b class="num">${ordered} из ${CAFES.length}</b></div>
-    <div class="box"><span>Доставок</span><b class="num">${del}</b></div>
-    <div class="box"><span>Вернули</span><b class="num ret">${q(ret)} шт</b><span class="num">Классика ${ret.cl} · Пепперони ${ret.pe}</span></div>
-    <div class="box"><span>Заплатят</span><b class="num">${rub(money)}</b></div></div>
+    <div class="box"><i class="ki a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 7h6M9 11h6"/></svg></i><span>Заказали</span><b class="num">${ordered} из ${CAFES.length}</b></div>
+    <div class="box"><i class="ki b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h11v9H2zM13 10h4l4 3v3h-8"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg></i><span>Доставок</span><b class="num">${del}</b></div>
+    <div class="box"><i class="ki c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-4"/></svg></i><span>Вернули</span><b class="num ret">${q(ret)} шт</b><span class="num">Классика ${ret.cl} · Пепперони ${ret.pe}</span></div>
+    <div class="box"><i class="ki d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="13" rx="2"/><circle cx="12" cy="12.5" r="2.5"/></svg></i><span>Заплатят</span><b class="num">${rub(money)}</b></div></div>
 
   <div class="tools">
     <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -298,7 +319,7 @@ function vCafe(){
 
   if(c.st==="none"){
     h+=`<h2>Заказать закуски</h2><p class="sub">${PRICE} ₽ за штуку · нажмите «+»</p>
-    <div class="box">${P.map(p=>`<div class="prod"><img src="${p.img}" alt="${p.name}"><div class="t">${tag(p)}<span>${p.comp}</span></div>${cnt(p.id,S.cart[p.id])}</div>`).join("")}</div>
+    <div class="pgrid">${P.map(p=>`<div class="box pcard"><img src="${p.img}" alt="${p.name}"><div class="pb">${tag(p)}<span>${p.comp}</span><div class="pr"><b class="num">${PRICE} ₽</b>${cnt(p.id,S.cart[p.id])}</div></div></div>`).join("")}</div>
     <button class="btn" data-act="order" ${q(S.cart)?"":"disabled"}>${q(S.cart)?`Отправить заказ · ${q(S.cart)} шт · ${rub(sum(S.cart))}`:"Выберите количество"}</button>`;
   } else if(c.st==="ordered"){
     h+=`<h2>Ваш заказ</h2><div class="box msg go">Заказ №${c.no} принят и ждёт курьера:<div class="lines num">${P.map(p=>`<div>${tag(p)}<span>${c.order[p.id]} шт</span></div>`).join("")}<div class="tot"><span>Сумма</span><span>${rub(sum(c.order))}</span></div></div></div>
