@@ -9,7 +9,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Golos+Text:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Golos+Text:wght@400;500;600;700&family=Rubik:wght@500;700;800&display=swap">
 <style>
 /* Простая учётная таблица: кафе строками; крупные слова вместо терминов. Классика = зелёный, Пепперони = красный (как на упаковке) */
 :root{
@@ -199,6 +199,64 @@ tfoot td{background:var(--head);font-weight:700;border-top:1px solid var(--line)
 .foot button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 14px;font-weight:600;font-size:13px;color:var(--ink)}
 @media (max-width:520px){.sum b{font-size:22px} th,td{padding:11px 4px} th:first-child,td:first-child{padding-left:10px} th:last-child,td:last-child{padding-right:10px}
   td:first-child{width:auto} .th-img{width:26px;height:26px} table{font-size:13px} .lnk{font-size:12px} td .st{font-size:11px;padding:2px 6px}}
+
+/* ===== Стиль «быстрое питание»: томатный, горчичный, оранжевый; крупные скругления; меню снизу, как в приложениях доставки ===== */
+:root{--tomato:#E63B2E;--tomato-dk:#B8281D;--mustard:#FFC531;--mustard-soft:#FFF2C7;--orange:#FF8A1F;--orange-soft:#FFE8D3;
+  --f-head:"Rubik","Golos Text",-apple-system,sans-serif;--nav-h:76px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--mustard-soft:#3A3013;--orange-soft:#3B2815;--tomato-dk:#FF8A80}}
+:root[data-theme="dark"]{--mustard-soft:#3A3013;--orange-soft:#3B2815;--tomato-dk:#FF8A80}
+body{padding-bottom:calc(var(--nav-h) + 36px + env(safe-area-inset-bottom,0px))}
+header{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--tomato) 0%,var(--orange) 100%);
+  -webkit-backdrop-filter:none;backdrop-filter:none;border-radius:0 0 30px 30px;padding-block:22px 26px;
+  margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding-inline:max(20px,env(safe-area-inset-left,0px));box-shadow:0 10px 30px color-mix(in srgb,var(--tomato) 25%,transparent)}
+header::before,header::after{content:"";position:absolute;border-radius:50%;background:var(--mustard);pointer-events:none}
+header::before{width:150px;height:150px;right:-40px;top:-60px;opacity:.45}
+header::after{width:70px;height:70px;right:90px;bottom:-34px;opacity:.3}
+.top{position:relative;z-index:1}
+.logo{color:#FFFFFF;font-size:36px}
+.date{color:rgba(255,255,255,.85)} .date b{color:#FFFFFF;font-family:var(--f-head);font-size:16px}
+/* Нижнее меню */
+.roles{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(560px,calc(100% - 24px));
+  margin:0;z-index:15;border-radius:26px;padding:6px;background:var(--card);border:1px solid var(--line);box-shadow:0 12px 34px rgba(80,30,0,.18)}
+.roles button{border-radius:20px;font-family:var(--f-head);font-weight:700;padding:9px 4px}
+.roles button[aria-selected="true"]{background:var(--tomato)!important;color:#FFFFFF!important;box-shadow:0 6px 16px color-mix(in srgb,var(--tomato) 35%,transparent)}
+.badge{background:var(--mustard);color:#1A1A1A;top:3px;right:10px}
+.roles button[aria-selected="true"] .badge{background:var(--mustard);color:#1A1A1A}
+.toast{bottom:calc(var(--nav-h) + 30px + env(safe-area-inset-bottom,0px));border-radius:14px}
+/* Подсказка «кто это видит» */
+.who-sees{background:var(--mustard-soft);border-radius:20px;margin-top:18px}
+.who-sees b{color:var(--tomato-dk)} .who-sees svg{color:var(--orange)}
+/* Заголовки и карточки */
+h2,.sum b,.next h3,.give b,.pcard .tag{font-family:var(--f-head)}
+h2{font-weight:800;letter-spacing:-.015em}
+.box,.tw{border-radius:24px}
+/* Цветные плитки с цифрами */
+.sum>div{border-color:transparent}
+.sum>div:nth-child(1){background:var(--orange-soft)} .sum>div:nth-child(2){background:var(--mustard-soft)}
+.sum>div:nth-child(3){background:var(--red-soft)} .sum>div:nth-child(4){background:var(--green-soft)}
+.ki{background:var(--card)!important;border-radius:14px}
+/* Кнопки, чипы, счётчики */
+.btn{border-radius:999px;background:var(--tomato);font-family:var(--f-head);box-shadow:0 10px 22px color-mix(in srgb,var(--tomato) 30%,transparent)}
+.btn.gr{background:var(--green-ink)}
+.btn.line{border-radius:999px}
+.chips button[aria-pressed="true"]{background:var(--tomato);border-color:var(--tomato);color:#FFFFFF}
+.chips.cafes button[aria-pressed="true"] i{background:#FFFFFF}
+.cnt{background:var(--orange-soft);border-color:transparent;border-radius:999px}
+.cnt button{color:var(--tomato)}
+.search{border-radius:999px}
+/* Карточки закусок: цена-стикер на фото */
+.pcard{position:relative;border-radius:26px}
+.sticker{position:absolute;top:10px;right:10px;z-index:1;background:var(--mustard);color:#1A1A1A;font-family:var(--f-head);font-weight:800;font-size:15px;
+  padding:6px 11px;border-radius:999px;transform:rotate(-6deg);box-shadow:0 4px 10px rgba(0,0,0,.15)}
+.pcard .pr b{display:none}
+.pcard .pr{justify-content:center}
+.pcard .cnt{width:100%;justify-content:space-between}
+/* Курьер: карточка следующей точки с цветной полосой */
+.next{border:0;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.next::before{content:"";position:absolute;inset:0 0 auto;height:6px;background:linear-gradient(90deg,var(--tomato),var(--orange),var(--mustard))}
+.next .k{color:var(--tomato)}
+.give div{background:var(--mustard-soft);border-color:transparent;border-radius:16px}
+.foot button{border-radius:999px}
 </style>
 
 <div class="app">
@@ -321,7 +379,7 @@ function vCafe(){
 
   if(c.st==="none"){
     h+=`<h2>Заказать закуски</h2><p class="sub">${PRICE} ₽ за штуку · нажмите «+»</p>
-    <div class="pgrid">${P.map(p=>`<div class="box pcard"><img src="${p.img}" alt="${p.name}"><div class="pb">${tag(p)}<span>${p.comp}</span><div class="pr"><b class="num">${PRICE} ₽</b>${cnt(p.id,S.cart[p.id])}</div></div></div>`).join("")}</div>
+    <div class="pgrid">${P.map(p=>`<div class="box pcard"><span class="sticker num">${PRICE} ₽</span><img src="${p.img}" alt="${p.name}"><div class="pb">${tag(p)}<span>${p.comp}</span><div class="pr"><b class="num">${PRICE} ₽</b>${cnt(p.id,S.cart[p.id])}</div></div></div>`).join("")}</div>
     <button class="btn" data-act="order" ${q(S.cart)?"":"disabled"}>${q(S.cart)?`Отправить заказ · ${q(S.cart)} шт · ${rub(sum(S.cart))}`:"Выберите количество"}</button>`;
   } else if(c.st==="ordered"){
     h+=`<h2>Ваш заказ</h2><div class="box msg go">Заказ №${c.no} принят и ждёт курьера:<div class="lines num">${P.map(p=>`<div>${tag(p)}<span>${c.order[p.id]} шт</span></div>`).join("")}<div class="tot"><span>Сумма</span><span>${rub(sum(c.order))}</span></div></div></div>
