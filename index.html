@@ -13,7 +13,7 @@
 <style>
 /* Простая учётная таблица: кафе строками; крупные слова вместо терминов. Классика = зелёный, Пепперони = красный (как на упаковке) */
 :root{
-  --bg:#F6F7F9; --card:#FFFFFF; --ink:#16181D; --muted:#6B7280; --line:#E8EAEF; --head:#F9FAFB;
+  --bg:#FFF7EF; --card:#FFFFFF; --ink:#16181D; --muted:#6B6F78; --line:#EFE6DC; --head:#FCFAF7;
   --shadow:0 1px 2px rgba(16,24,40,.04),0 6px 20px rgba(16,24,40,.06);
   --pattern:url(img/pattern-light.svg);
   --red:#C8261F; --red-soft:#FBE7E5;
@@ -36,7 +36,7 @@
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 /* Фон: бледный узор «кафе и доставка» поверх светлого цвета; блоки лежат на белых карточках, поэтому узор не мешает */
-body{background:var(--pattern) 0 0/260px 260px repeat fixed,var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.45;
+body{background:var(--pattern) 0 0/320px 320px repeat fixed,var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.45;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 .app{max-width:760px;margin:0 auto}
