@@ -195,6 +195,8 @@ tfoot td{background:var(--head);font-weight:700;border-top:1px solid var(--line)
 .inv .sg div{border:1px solid var(--line);border-radius:8px;padding:8px}
 .inv .sg b{display:block;color:var(--green-ink);font-size:13px}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;z-index:30;max-width:calc(100% - 32px)}
+a.btn.maplink{display:block;text-align:center;text-decoration:none;margin-top:10px}
+.next a.btn.maplink{margin:10px 0 2px;padding:11px;font-size:15px}
 .foot{font-size:12px;color:var(--muted);margin-top:18px;text-align:center;display:grid;gap:8px;justify-items:center}
 .foot button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 14px;font-weight:600;font-size:13px;color:var(--ink)}
 @media (max-width:520px){.sum b{font-size:22px} th,td{padding:11px 4px} th:first-child,td:first-child{padding-left:10px} th:last-child,td:last-child{padding-right:10px}
@@ -349,14 +351,29 @@ function vCafe(){
 }
 
 /* ========== КУРЬЕР ========== */
+// Точки на карте (адреса кафе в Махачкале) и цех — для маршрута в Яндекс.Картах
+const POINTS={"Кофейня «Каспий»": [42.981011, 47.506881], "Barhan Coffee": [42.979579, 47.512988], "Кафе «Утро»": [42.981065, 47.472536], "Кофейня «Чашка»": [42.972783, 47.509321], "Кафе «Сарахан»": [42.982886, 47.496133], "Горец Coffee": [42.971678, 47.53082], "Кофейня «Маяк»": [42.983648, 47.510762], "Кафе «Зерно»": [42.993486, 47.476378], "Кафе «Нур»": [42.983881, 47.472605], "Кофейня «Бриз»": [42.976714, 47.524221]};
+const BASE_POINT=[43.009577, 47.448775];
+const pt=c=>POINTS[c.name];
+const ymRoute=list=>"https://yandex.ru/maps/?rtext=~"+list.map(c=>pt(c).join(",")).join("~")+"&rtt=auto";
+function km(a,b){const r=Math.PI/180,h=Math.sin((b[0]-a[0])*r/2)**2+Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin((b[1]-a[1])*r/2)**2;return 12742*Math.asin(Math.sqrt(h))}
+// Порядок объезда: от цеха каждый раз к ближайшему следующему кафе
+function byRoute(list){const left=list.filter(pt),out=[];let cur=BASE_POINT;while(left.length){let bi=0;left.forEach((c,i)=>{if(km(cur,pt(c))<km(cur,pt(left[bi])))bi=i});const[c]=left.splice(bi,1);out.push(c);cur=pt(c)}return[...out,...list.filter(c=>!pt(c))]}
+
 function vCourier(){
   const route=CAFES.filter(c=>c.st!=="none"||c.hist.length).sort((a,b)=>(a.queue||1e9)-(b.queue||1e9));
-  const todo=route.filter(c=>c.st==="ordered"), nxt=todo[0];
+  const todo=byRoute(route.filter(c=>c.st==="ordered")), nxt=todo[0];
   let h=sees(`Это экран <b>курьера</b>. Он видит, куда ехать и что отдать. На месте отмечает, сколько забрал назад, и жмёт «Доставил».`);
-  if(!route.length) return h+`<div class="box empty" style="margin-top:16px">Заказов пока нет.<br>Откройте вкладку <b>«Кафе»</b> и сделайте заказ — он сразу появится здесь.</div>`;
+  if(!route.length) return h+`<div class="box empty" style="margin-top:16px">Заказов пока нет.<br>Откройте вкладку <b>«Кафе»</b> и сделайте заказ — он сразу появится здесь.</div>
+    <button class="btn" data-act="demo-fill">Показать пример: все 10 кафе заказали</button>`;
+  if(todo.length){
+    h+=`<h2>Маршрут в Яндекс.Картах</h2><p class="sub">Точки в порядке объезда от цеха. Откроются Яндекс.Карты с готовым маршрутом.</p>
+      <a class="btn maplink" href="${ymRoute(todo.filter(pt))}" target="_blank" rel="noopener">Маршрут по всем точкам (${todo.filter(pt).length})</a>`;
+  }
   if(nxt){
     h+=`<h2>Следующая точка</h2><p class="sub">Осталось развезти: ${todo.length}</p>
     <div class="box next"><div class="k">Едем сюда</div><h3>${nxt.name}</h3><div class="a">${nxt.addr}</div>
+      ${pt(nxt)?`<a class="btn line maplink" href="${ymRoute([nxt])}" target="_blank" rel="noopener">Открыть в Яндекс.Картах</a>`:""}
       <div class="give num">${P.map(p=>`<div>${tag(p)}<b>${nxt.order[p.id]}</b></div>`).join("")}</div>
       <div class="back"><p>Сколько непроданных забрал назад?</p>
         ${P.map(p=>`<div class="row">${tag(p)}${cnt(nxt.id+":"+p.id,nxt.ret[p.id])}</div>`).join("")}</div>
@@ -369,7 +386,7 @@ function vCourier(){
   h+=`<h2>Возврат в машине</h2><p class="sub">Это нужно сдать в цех в конце дня</p>
   <div class="give num">${P.map(p=>`<div class="box">${tag(p)}<b class="ret">${back[p.id]}</b></div>`).join("")}</div>
   <h2>Мой маршрут</h2><div class="box allr">`;
-  route.forEach((c,i)=>{
+  [...todo,...route.filter(c=>c.st!=="ordered")].forEach((c,i)=>{
     const r=c.st==="wait"||c.st==="ok"?c.ret:null;
     h+=`<div class="li"><div><b>${i+1}. ${c.name}</b><span class="a">${c.addr}${r&&q(r)?` · <span class="ret">возврат ${retWhat(r)}</span>`:""}</span></div>${
       c.st==="ok"?`<span class="st ok">✓ ${c.time}</span>`:c.st==="wait"?`<span class="st go">Ждём кафе</span>`:c===nxt?`<span class="st go">Едем сейчас</span>`:c.st==="ordered"?`<span class="st no">Впереди</span>`:`<span class="st ok">✓ готово</span>`}</div>`;
@@ -415,6 +432,7 @@ document.addEventListener("click",e=>{
   if(a==="edit"){const c=byId(S.cafe);S.cart={...c.order};c.order=null;c.st="none"}
   if(a==="done"){const c=byId(b.dataset.id);c.st="wait";c.time=now();S.cafe=c.id;toast("Кафе получило вопрос «Всё верно?» — откройте вкладку «Кафе»")}
   if(a==="confirm"){const c=byId(S.cafe);c.st="ok";c.hist.unshift({no:c.no,time:c.time,order:{...c.order},ret:{...c.ret},pay:pay(c)});render();invoice(c.id);return}
+  if(a==="demo-fill"){CAFES.forEach((c,i)=>{if(c.st!=="none")return;c.order={cl:6+(i*3)%8,pe:2+(i*5)%7};c.ret={cl:0,pe:0};c.st="ordered";c.no=S.nextNo++;c.queue=++S.queue});toast("Все 10 кафе заказали — маршрут готов")}
   if(a==="again"){const c=byId(S.cafe);c.order=null;c.ret={cl:0,pe:0};c.st="none"}
   if(a==="flt"){S.f=b.dataset.id;S.pick=0}
   if(a==="pickcafe"){S.pick=S.pick===+b.dataset.id?0:+b.dataset.id}
