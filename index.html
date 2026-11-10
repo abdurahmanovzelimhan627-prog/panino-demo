@@ -298,8 +298,45 @@ h2{font-weight:700;letter-spacing:-.01em}
 .roles button[aria-selected="true"]{background:var(--red)!important;color:#FFF8F1!important}
 .badge{background:var(--red)}
 .sum>div{background:var(--card)!important}
+/* ===== Ингредиенты по краям экрана (как на фото Tortilla): лежат под всеми блоками и не мешают нажатиям ===== */
+.decor{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.decor img{position:absolute;filter:drop-shadow(0 10px 14px rgba(74,40,20,.22))}
+.app{position:relative;z-index:1}
+header{position:relative!important;background:transparent!important}
+/* Телефон: выглядывают из-за краёв */
+.d1{width:84px;top:-52px;left:-44px;transform:rotate(-18deg)}
+.d2{width:84px;top:118px;right:-38px;transform:rotate(12deg)}
+.d3{width:80px;top:42%;left:-40px;transform:rotate(-14deg)}
+.d4{width:88px;top:58%;right:-44px;transform:rotate(20deg)}
+.d5{width:92px;bottom:72px;left:-34px;transform:rotate(30deg)}
+.d6{width:96px;bottom:-22px;right:-18px;transform:rotate(-10deg)}
+.d7{width:74px;top:78%;right:-26px;transform:rotate(-24deg)}
+.d8{width:70px;bottom:-16px;left:30%;transform:rotate(-8deg)}
+.d9,.d10{display:none}
+/* Компьютер: ингредиенты лежат вокруг колонки приложения */
+@media (min-width:820px){
+  .d1{width:170px;top:40px;left:4%;transform:rotate(-18deg)}
+  .d2{width:150px;top:120px;right:6%}
+  .d3{width:140px;top:46%;left:7%}
+  .d4{width:160px;top:52%;right:5%}
+  .d5{width:170px;bottom:60px;left:5%}
+  .d6{width:170px;bottom:40px;right:7%}
+  .d7{width:120px;top:10px;right:24%}
+  .d8{width:120px;bottom:10px;left:24%}
+  .d9{display:block;width:110px;top:30%;left:16%;transform:rotate(30deg)}
+  .d10{display:block;width:120px;top:24%;right:15%;transform:rotate(160deg)}
+}
+@media print{.decor{display:none}}
+
 </style>
 
+<div class="decor" aria-hidden="true">
+  <img class="d1" src="img/decor/basil.svg" alt=""><img class="d2" src="img/decor/tomato.svg" alt="">
+  <img class="d3" src="img/decor/mushroom.svg" alt=""><img class="d4" src="img/decor/pepperoni.svg" alt="">
+  <img class="d5" src="img/decor/chili.svg" alt=""><img class="d6" src="img/decor/cheese.svg" alt="">
+  <img class="d7" src="img/decor/wheat.svg" alt=""><img class="d8" src="img/decor/olive.svg" alt="">
+  <img class="d9" src="img/decor/tomato.svg" alt=""><img class="d10" src="img/decor/basil.svg" alt="">
+</div>
 <div class="app">
   <header>
     <div class="top">
